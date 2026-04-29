@@ -312,7 +312,7 @@ img { max-width: 100%; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 30px;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .step-card {
