@@ -214,6 +214,14 @@ function renderQuestion() {
     grid.appendChild(btn);
   });
 
+  // Reset next button
+  const nextBtn = document.getElementById('nextBtn');
+  if (nextBtn) {
+    nextBtn.classList.remove('visible');
+    const isLast = currentQ === QUESTIONS.length - 1;
+    nextBtn.textContent = isLast ? '✨ ดูผลลัพธ์' : 'ถัดไป →';
+  }
+
   // Progress
   const pct = ((currentQ) / QUESTIONS.length) * 100;
   document.getElementById('progressFill').style.width = Math.max(pct, 5) + '%';
@@ -233,8 +241,27 @@ function selectAnswer(idx, gems) {
   // Highlight selected
   document.querySelectorAll('.option-btn').forEach((b, i) => {
     b.classList.toggle('selected', i === idx);
-    b.disabled = true;
   });
+
+  // Store pending gems, don't apply yet
+  const nextBtn = document.getElementById('nextBtn');
+  if (nextBtn) {
+    nextBtn.classList.add('visible');
+    // Store gems on button for later
+    nextBtn.dataset.pendingGems = JSON.stringify(gems);
+    nextBtn.dataset.pendingIdx = idx;
+  }
+}
+
+function advanceQuestion() {
+  const nextBtn = document.getElementById('nextBtn');
+  if (!nextBtn || !nextBtn.dataset.pendingGems) return;
+
+  const gems = JSON.parse(nextBtn.dataset.pendingGems);
+  const idx = parseInt(nextBtn.dataset.pendingIdx);
+
+  // Disable all options
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
 
   // Add scores
   Object.entries(gems).forEach(([gem, pts]) => {
@@ -242,7 +269,10 @@ function selectAnswer(idx, gems) {
   });
   answers.push(idx);
 
-  // Delay before next
+  // Clear pending
+  nextBtn.dataset.pendingGems = '';
+  nextBtn.classList.remove('visible');
+
   setTimeout(() => {
     currentQ++;
     if (currentQ < QUESTIONS.length) {
@@ -250,7 +280,7 @@ function selectAnswer(idx, gems) {
     } else {
       showResult();
     }
-  }, 500);
+  }, 200);
 }
 
 function showResult() {
