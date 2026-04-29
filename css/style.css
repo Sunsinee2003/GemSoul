@@ -365,9 +365,9 @@ img { max-width: 100%; }
 }
 .gems-preview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  max-width: 1300px;
+  max-width: 1000px;
   margin: 0 auto 48px;
 }
 .gem-preview-card {
@@ -921,10 +921,8 @@ img { max-width: 100%; }
   }
   .nav-toggle { display: block; }
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .gems-preview-grid { grid-template-columns: repeat(2, 1fr); }
-  .gem-article { padding: 28px 20px; }
-  .steps-grid { gap: 16px; }
 }
 
 /* Gem-specific glows on result */
